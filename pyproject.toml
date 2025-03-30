@@ -1,0 +1,16 @@
+[project]
+name = "ams-chatbot"
+version = "0.1.0"
+description = "A Flask-based microservice for the Airline Management System chatbot"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "flask>=3.1.0",
+    "pytest>=8.3.5",
+    "python-dotenv>=1.1.0",
+]
+
+[dependency-groups]
+dev = [
+    "gunicorn>=23.0.0",
+]

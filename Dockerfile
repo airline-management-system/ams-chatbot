@@ -1,9 +1,11 @@
-FROM golang:1.23-alpine
-WORKDIR /app
-COPY . .
-ENV CGO_ENABLED=0
-RUN go build -ldflags '-w -s -extldflags "-static"' -a -o application cmd/app/main.go
+FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim
 
-FROM scratch
-COPY --from=0 /app/application ./
-CMD ["./application"]
+# Copy the project into the image
+ADD . /chatbot
+
+# Sync the project into a new environment, using the frozen lockfile
+WORKDIR /chatbot
+RUN uv sync --frozen
+
+EXPOSE 8081
+CMD ["uv", "run", "gunicorn", "--bind", "0.0.0.0:8081", "application:create_app()"] 
