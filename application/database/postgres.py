@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from typing import Optional
 from langchain_community.utilities import SQLDatabase
+from application.config import Config
 
 
 class PostgreDB:
@@ -15,7 +16,8 @@ class PostgreDB:
     def connect(self) -> None:
         """Establish database connection"""
         try:
-            DATABASE_URL = "postgresql://postgres:12345678@localhost:5432/ams-local"
+            db_config = Config.get_database_config()
+            DATABASE_URL = f"postgresql://{db_config['type']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['name']}"
             self.engine = create_engine(DATABASE_URL)
             self.SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=self.engine)
         except Exception as e:

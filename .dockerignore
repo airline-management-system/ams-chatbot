@@ -92,3 +92,8 @@ venv/
 Jenkinsfile
 Agent.yaml
 LICENSE
+
+
+.DS_Store
+config.yaml
+secret.yaml
