@@ -4,7 +4,6 @@ from langchain_community.agent_toolkits import create_sql_agent
 from application.database.postgres import PostgreDB
 from langchain.agents import AgentExecutor
 from application.retriaval.rag import RAG
-from langchain_core.language_models import LanguageModelInput
 
 
 client = GeminiClient()

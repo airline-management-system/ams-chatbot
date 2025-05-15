@@ -3,6 +3,7 @@ class PromptManager:
         pass
 
     def enhanced_prompt(self, user_prompt:str):
+
         enhanced_prompt = f"""
                 You are an expert AI assistant for an airline management system. Your capabilities include:
 
@@ -52,9 +53,9 @@ class PromptManager:
 
                 User request: {user_prompt}
                 """
+        
         return enhanced_prompt 
     
-    """TODO: handle out of context prompts"""
 
     def rag_prompt(self, chunks, prompt) -> str:
         prompt = f"""
