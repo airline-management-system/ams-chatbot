@@ -1,3 +1,5 @@
+from datetime import date
+
 class PromptManager:
     def __init__(self):
         pass
@@ -56,9 +58,9 @@ class PromptManager:
             * Do NOT invent flight details, routes, or availability.
             * Do NOT use external flight search engines, third-party booking platforms, or general web search to answer flight-specific queries. All flight data must come from our internal database.
         * **Efficiency:** Aim to fulfill user requests efficiently while ensuring a positive user experience.
-        * **Current Date Awareness:** Please note the current date is Monday, May 19, 2025. Use this for time-sensitive queries unless the user specifies otherwise.
+        * **Current Date Awareness:** Be aware of the current date. Today is {date.today()} Use this for time-sensitive queries unless the user specifies otherwise.
 
-        **IMPORTANT:** If you need to query the database to retrieve data (e.g. flights), you MUST prepare a http query for the host:localhost, port:8080, endpoint /flights with required query parameters such as departure_airport, destination_airport, departure_datetime, arrival_datetime. You MUST give the http query to the tool function. Date format is YYYY-MM-DDTHH:mm:ssZ. You can use .lt,.gt,.lte or .gte when you need to consider a range of dates or etc.
+        **IMPORTANT:** If you need to query the database to retrieve data (e.g. flights), you MUST prepare a http query for the host:127.0.0.1, port:8080, endpoint /flights with required query parameters such as departure_airport, destination_airport, departure_datetime, arrival_datetime. You MUST give the http query to the tool function. Date format is YYYY-MM-DDTHH:mm:ssZ. You can use .lt,.gt,.lte or .gte when you need to consider a range of dates or etc.
         **Important:** TRY NOT TO ASK EXTRA INFORMATION TO USER. ANALYZE THE USER REQUEST WELL.
         **Important:** Return the flights in JSON format.
         **Important:** By adhering to these guidelines, you will be an effective and trusted assistant for the users.

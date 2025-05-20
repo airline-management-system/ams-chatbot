@@ -3,6 +3,7 @@ from flask import request, jsonify
 import jwt
 from application.config import Config
 
+"""WILL BE IMPLEMENTED"""
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
