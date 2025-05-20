@@ -42,24 +42,16 @@ class MCPClient:
 
         await self.session.initialize()
 
-        # List available tools
-        response = await self.session.list_tools()
-        tools = response.tools
-        print("\nConnected to server with tools:", [tool.name for tool in tools])
-
     async def process_query(self, query: str, history) -> str:
         """Process a query using Gemini and available tools"""
         await self.connect_to_server('application/mcp/server.py')
         prompt_manager = PromptManager()
         enhanced_query = prompt_manager.initial_prompt(user_prompt=query)
         
-        messages = history
-        messages.append([
-            {
-                "role": "user",
-                "content": enhanced_query
-            }
-        ])
+        messages = []
+        for msg in history:
+            messages.append(types.Content(role=msg['role'], parts=[types.Part(text=msg['content'])]))
+        messages.append(types.Content(role="user", parts=[types.Part(text=enhanced_query)]))
 
         mcp_tools = await self.session.list_tools()
         # Remove debug prints
@@ -83,18 +75,21 @@ class MCPClient:
         # Initial Gemini API call
         response = self.client.models.generate_content(
                 model="gemini-2.0-flash",
-                contents=enhanced_query,
+                contents=messages,
                 config=types.GenerateContentConfig(
+                    temperature=1,
+                    top_k=64,
+                    top_p=0.95,
                     tools=tools,
-                    response_modalities=['TEXT'],
                 ),
             )
 
-        
+        final_text = ""
         # Process response and handle tool calls
-        final_text = response.text
+        if response.text != None:
+            final_text += response.text
 
-        assistant_message_content = []
+        #assistant_message_content = []
         for content in response.candidates[0].content.parts:
             if hasattr(content, 'function_call') and content.function_call is not None:
                 tool_name = content.function_call.name
@@ -104,22 +99,20 @@ class MCPClient:
                 result = await self.session.call_tool(tool_name, tool_args)
                 #final_text.append(f"[Calling tool {tool_name} with args {tool_args}]")
 
-                assistant_message_content.append(content)
-                messages.append({
-                    "role": "bot",
-                    "content": assistant_message_content
-                })
-                messages.append({
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "tool_result",
-                            "content": prompt_manager.enhanced_prompt(user_prompt=result.content[0].text)
-                        }
-                    ]
-                })
+                # Convert assistant message content to proper format
+                #assistant_message = types.Content(
+                #    role="model",
+                #    parts=[types.Part(text=str(content))]
+                #)
+                #messages.append(assistant_message)
 
-                new_prompt = prompt_manager.enhanced_prompt(user_prompt=result.content[0].text)
+                # Add user message with tool result
+                user_message = types.Content(
+                    role="user",
+                    parts=[types.Part(text=prompt_manager.second_prompt(user_prompt=result.content[0].text))]
+                )
+                messages.append(user_message)
+
                 # Get next response from Gemini
                 response = self.client.models.generate_content(
                     model="gemini-2.0-flash",
@@ -129,7 +122,6 @@ class MCPClient:
                         top_k=64,
                         top_p=0.95,
                         tools=tools,
-                        response_modalities=['TEXT']
                     ),
                 )
 
