@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  chatbot:
+    build: .
+    env_file: .env  # Load environment variables from .env file
+    ports:
+      - "8081:8081"  # Must match EXPOSE in Dockerfile
+    environment:
+      - FLASK_ENV=production  # Optional: explicitly set Flask environment
+
+    restart: unless-stopped  # Auto-restart on crashes
