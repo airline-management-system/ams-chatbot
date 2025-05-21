@@ -87,11 +87,11 @@ class MCPClient:
                         #final_text.append(f"[Calling tool {tool_name} with args {tool_args}]")
 
                         # Convert assistant message content to proper format
-                        #assistant_message = types.Content(
-                        #    role="model",
-                        #    parts=[types.Part(text=str(content))]
-                        #)
-                        #messages.append(assistant_message)
+                        assistant_message = types.Content(
+                           role="model",
+                        parts=[types.Part(text=str(content))]
+                        )
+                        messages.append(assistant_message)
 
                         # Add user message with tool result
                         user_message = types.Content(
@@ -113,6 +113,8 @@ class MCPClient:
                         )
 
                         final_text += response.text
+
+                        
                         
                 json_response = {"input": query, "output":final_text}
                 json_output = json.dumps(json_response)
