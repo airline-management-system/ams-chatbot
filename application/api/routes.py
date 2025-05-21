@@ -2,6 +2,7 @@ from flask import request,jsonify
 from application.api import bp
 from application.model.client import GeminiClient
 from application.mcp.client import MCPClient
+from application.model.prompt_manager import PromptManager
 
 
 @bp.route('/health', methods=['GET'])
@@ -27,11 +28,12 @@ async def query_model():
 
 @bp.route('/crm', methods=['POST'])
 def crm():
-    data = request.get_json()['prompt']
+    data = str(request.get_json()['prompt'])
     if not data:
         return jsonify({'error': 'No JSON data provided'}), 400
 
     client = GeminiClient()
-    response = client.generate_response(prompt=data)
+    prompt_manager = PromptManager()
+    response = client.generate_response(prompt=prompt_manager.crm_prompt(data))
 
     return response
