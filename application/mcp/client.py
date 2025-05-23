@@ -102,7 +102,7 @@ class MCPClient:
                     # Add user message with tool result
                     user_message = types.Content(
                         role="user",
-                        parts=[types.Part(text=prompt_manager.new_second_prompt(flights=flights, initial_user_prompt=query))]
+                        parts=[types.Part(text=prompt_manager.second_prompt(flights=flights, initial_user_prompt=query))]
                     )
                     messages.append(user_message)
                             

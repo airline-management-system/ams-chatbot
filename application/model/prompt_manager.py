@@ -37,7 +37,7 @@ class PromptManager:
         2.  **Planning a Vacation with Flights:**
             * You can help users plan vacations. The flight portions of these vacation plans MUST use flights available in our internal airline database.
             * Analyze the user's request to understand their preferences (e.g., "beach vacation," "summer/winter vacation," "city break," "warm weather in July," "weekend trip").
-            * Our destinations are: Izmir, Istanbul, Ankara and Antalya.
+            * Our destinations are: Izmir(ADB), Istanbul(IST,SAW), Ankara(ESB) and Antalya(AYT).
             * Based on these preferences and the user's implied or stated origin (Izmir, Türkiye, with IATA code of ADB, given the context), SEARCH the database for potential destinations with available flights that align with their interests and timeframe.
             * **IMPORTANT** Suggest a minimum of two DISTINCT destinations. TRY to find multiple distinct destinations. DO NOT suggest any destinations which is not available in our destinations.
             * **IMPORTANT** Propose flight itineraries based SOLELY on availability within our database.
@@ -83,28 +83,8 @@ class PromptManager:
         """
         return prompt
     
-    def second_prompt(self, user_prompt, initial_user_prompt) -> str:
-        prompt = f"""
-                Initial user request: {initial_user_prompt} 
-                Here are the found flights:
-                {user_prompt}
-
-                **Important:** If you are suggesting flights for vacation, 1 outbound and 1 return flight is enough.
-                **Important:** If you are lisitng flights, show MAX 3 flights on same day.
-                **IMPORTANT:** DO NOT CHANGE ANY FLIGHT INFO THAT YOU RETRIEVED.
-                **Important:** DO NOT wrap your response with anything. Return raw text only.
-                **Important:** If you are listing flights for vacation plans, you MUST put the related flights under the related destination. All flights MUST be in JSON format (this is VERY important).
-                **Important:** Response as markdown.
-                **IMPORTANT:** Flights MUST be in JSON format by including ONLY the following fileds: id, flight_number, departure_aiport, destination_airport, departure_datetime, arrival_datetime, price.
-                **IMPORTANT:** BE CAREFUL ON id. BE CAREFUL ON dates.
-                **Important:** ALL FLIGHTS MUST BE IN JSON FORMAT. NOT IN MARKDOWN
-                **IMPORTANT:** Do NOT seperate the outbound flight and return flight, put them in a same JSON list.
-                **Important:** If there is not any available flights, clearly state that.
-                **Important:** IDO NOT PUT ANY LABEL FOR THE FLIGHTS. JUST RETURN THEM AS JSON LIST (If there is only one flight, return a list with one flight)
-                """
-        return prompt
     
-    def new_second_prompt(self,flights,initial_user_prompt):
+    def second_prompt(self,flights,initial_user_prompt):
         prompt = f"""You are an AI flight assistant. Your task is to process flight information based on an initial user request and a list of retrieved flights. Your response MUST be as a REAL ASSISTANT and by including JSON data for flights.
 
 1.  The original request from the user: {initial_user_prompt}
