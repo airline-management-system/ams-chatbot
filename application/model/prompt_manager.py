@@ -9,12 +9,12 @@ class PromptManager:
         prompt = f"""
                 You are a highly skilled AI assistant for an airline management system. Your primary goal is to provide accurate, comprehensive, and contextually relevant answers to user questions using only the information found in the retrieved documents. You are an expert in understanding complex queries related to airline operations, customer service, and logistical information.
 
-                Begin by thoroughly examining the following retrieved documents. Each document may contain critical information needed to answer the user's question. Pay close attention to details such as flight schedules, customer data, airport information, policies, and any other relevant data.
+                Begin by thoroughly examining the following retrieved documents. Each document may contain critical information needed to answer the user's question. Pay close attention to details such as policies, regulations, core values and any other relevant data.
 
                 Here are the retrieved documents:
                 {chunks}
 
-                Using the information from the retrieved documents, answer the following question as accurately and completely as possible. Provide clear explanations and reasoning for your answer, citing the specific document(s) used. If a question cannot be answered from the information within the provided documents, state clearly that the information is not available and do not make up any information.
+                Using the information from the retrieved documents, answer the following question as accurately and completely as possible. Provide clear explanations and reasoning for your answer, citing the specific document(s) used at the end of your answer. If a question cannot be answered from the information within the provided documents, state clearly that the information is not available and do not make up any information.
 
                 Question: {prompt}
                 """
@@ -63,7 +63,7 @@ class PromptManager:
         * **Current Date Awareness:** Be aware of the current date. Today is {date.today()} Use this for time-sensitive queries unless the user specifies otherwise. Do NOT suggest the flights earlier than today.
 
         **QUERY:**
-        **IMPORTANT:** If you need to query the database to retrieve data (e.g. flights), you MUST prepare a http query for the host:127.0.0.1, port:8080, endpoint /flights with required query parameters such as departure_airport, destination_airport, departure_datetime, arrival_datetime, price. You MUST give the http query to the tool function. Date format is YYYY-MM-DDTHH:mm:ssZ. You can use .lt,.gt,.lte or .gte when you need to consider a range of dates or etc.
+        **IMPORTANT:** If you need to query the database to retrieve data (e.g. flights), you MUST prepare a http query for the host:127.0.0.1, port:8080, endpoint /flights with required query parameters such as departure_airport, destination_airport, departure_datetime, arrival_datetime, price. You MUST give the http query to the tool function. Date format is YYYY-MM-DDTHH:mm:ssZ. You can use .lt,.gt,.lte or .gte when you need to consider a range of dates or etc. Example usage: departure_datetime.lte
         **IMPORTANT:** You can put multiple values for a query parameter. For example, you can put multiple destination_airport values by adding destination_airport parameter again and again.
         **IMPORTANT:** Do NOT put any spaces into the query.
         **IMPORTANT:** If user wants you to plan a vacation, you MUST query the database by only using the departure_airport parameter with the given time period. And you MUST suggest a return flight by using the destination_airport parameter.
@@ -140,6 +140,7 @@ class PromptManager:
 
     Finally check your answers by yourself and be clear.
     **IMPORTANT:** Return flights departure times cannot be greater than the outbound flights.
+    All flights MUST be in a JSON list.
     """
         return prompt
     

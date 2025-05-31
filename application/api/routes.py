@@ -3,6 +3,7 @@ from application.api import bp
 from application.model.client import GeminiClient
 from application.mcp.client import MCPClient
 from application.model.prompt_manager import PromptManager
+from application.retriaval.rag import RAG
 
 
 @bp.route('/health', methods=['GET'])
@@ -25,6 +26,19 @@ async def query_model():
 
     return response
 
+@bp.route('/employee_rag', methods=['POST'])
+def employee_rag():
+    data = str(request.get_json()['prompt'])
+    if not data:
+        return jsonify({'error': 'No JSON data provided'}), 400
+
+    client = GeminiClient()
+    prompt_manager = PromptManager()
+    rag_client = RAG()
+    chunks = rag_client.query_similar_chunks(query=data, n_results=5)
+    response = client.generate_response(prompt=prompt_manager.rag_prompt(chunks=chunks, prompt=data))
+
+    return response
 
 @bp.route('/crm', methods=['POST'])
 def crm():
