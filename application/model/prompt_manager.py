@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import datetime
 
 class PromptManager:
     def __init__(self):
@@ -60,7 +60,7 @@ class PromptManager:
             * Do NOT invent flight details, routes, or availability.
             * Do NOT use external flight search engines, third-party booking platforms, or general web search to answer flight-specific queries. All flight data must come from our internal database.
         * **Efficiency:** Aim to fulfill user requests efficiently while ensuring a positive user experience.
-        * **Current Date Awareness:** Be aware of the current date. Today is {date.today()} Use this for time-sensitive queries unless the user specifies otherwise. Do NOT suggest the flights earlier than today.
+        * **Current Date Awareness:** Be aware of the current date. Today is {datetime.now()} Use this for time-sensitive queries unless the user specifies otherwise. Do NOT suggest the flights earlier than today and consider the current time.
 
         **QUERY:**
         **IMPORTANT:** If you need to query the database to retrieve data (e.g. flights), you MUST prepare a http query for the host:127.0.0.1, port:8080, endpoint /flights with required query parameters such as departure_airport, destination_airport, departure_datetime, arrival_datetime, price. You MUST give the http query to the tool function. Date format is YYYY-MM-DDTHH:mm:ssZ. You can use .lt,.gt,.lte or .gte when you need to consider a range of dates or etc. Example usage: departure_datetime.lte
