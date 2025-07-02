@@ -140,7 +140,6 @@ class PromptManager:
 
     Finally check your answers by yourself and be clear.
     **IMPORTANT:** Return flights departure times cannot be greater than the outbound flights.
-    All flights MUST be in a JSON list.
     """
         return prompt
     

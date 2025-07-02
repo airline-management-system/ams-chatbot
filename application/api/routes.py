@@ -1,3 +1,4 @@
+import json
 from flask import request,jsonify
 from application.api import bp
 from application.model.client import GeminiClient
@@ -37,8 +38,9 @@ def employee_rag():
     rag_client = RAG()
     chunks = rag_client.query_similar_chunks(query=data, n_results=5)
     response = client.generate_response(prompt=prompt_manager.rag_prompt(chunks=chunks, prompt=data))
-
-    return response
+    json_response = {"input": data, "output":response}
+    json_output = json.dumps(json_response)
+    return json_output   
 
 @bp.route('/crm', methods=['POST'])
 def crm():

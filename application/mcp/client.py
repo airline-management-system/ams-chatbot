@@ -85,7 +85,7 @@ class MCPClient:
                         check = True
                         tool_name = content.function_call.name
                         tool_args = content.function_call.args
-
+                        print(tool_name, tool_args)
                         # Execute tool call
                         result = await session.call_tool(tool_name, tool_args)
 
